@@ -2,7 +2,7 @@
 
 A read-only DankMaterialShell Control Center companion for [Gaze](https://github.com/GunduLabs/gaze) facial authentication.
 
-> **Status:** release candidate for the Dank Plugin Registry. The plugin, manifest, status helper, installation routines, real DMS validation, and representative screenshot are complete.
+> **Status:** public release candidate for the Dank Plugin Registry. The plugin, manifest, status helper, installation routines, real DMS validation, and representative screenshot are complete. Registry submission: [AvengeMedia/dms-plugin-registry#733](https://github.com/AvengeMedia/dms-plugin-registry/pull/733).
 
 The plugin shows whether Gaze is installed, whether `gazed` is active, whether an enrollment is visible, and which PAM surfaces reference Gaze. It can run `gaze doctor`, open `gaze-gui`, or open the official installation guide. It never edits PAM, enrolls a face, or stores biometric data.
 

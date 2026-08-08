@@ -2,7 +2,7 @@
 
 Plugin de Control Center para consultar el estado de [Gaze](https://github.com/GunduLabs/gaze) dentro de DankMaterialShell.
 
-> **Estado:** versión candidata para Dank Plugins. Ya están completos el manifiesto, el componente QML, el diagnóstico, las rutinas de instalación, la validación con DMS real y la captura representativa.
+> **Estado:** versión candidata pública para Dank Plugins. Ya están completos el manifiesto, el componente QML, el diagnóstico, las rutinas de instalación, la validación con DMS real y la captura representativa. Solicitud al registro: [AvengeMedia/dms-plugin-registry#733](https://github.com/AvengeMedia/dms-plugin-registry/pull/733).
 
 ![Panel detallado de Gaze Authentication en DankMaterialShell](assets/screenshot.png)
 

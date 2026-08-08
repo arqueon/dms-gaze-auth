@@ -13,7 +13,7 @@ The repository now contains a real DMS plugin:
 - GPL-3.0-or-later licensing;
 - installation and validation documentation.
 
-The plugin is ready to publish and submit. The remaining publication steps are making the repository reachable, validating its final links, and opening the registry pull request.
+The plugin is published and submitted in [AvengeMedia/dms-plugin-registry#733](https://github.com/AvengeMedia/dms-plugin-registry/pull/733). The registry schema, link, manifest-identity, and preview checks pass. Maintainer review and merge remain external steps.
 
 ## Classification
 
@@ -56,10 +56,10 @@ The QML component and status helper do not assume a package manager or PAM base 
 - [x] Exercise dry package plans for Ubuntu, Debian, Fedora mutable, and Arch-compatible systems.
 - [ ] Exercise apply paths on disposable Ubuntu, Debian, Fedora mutable, and Fedora OSTree systems (follow-up evidence; not claimed by this release).
 - [x] Capture a representative screenshot on the default DMS theme.
-- [ ] Publish the repository and verify the final raw screenshot URL.
-- [ ] Add registry JSON and run `generate.py --validate` plus `validate_links.py`.
-- [ ] Submit a registry PR without claiming first-party or reviewed status.
+- [x] Publish the repository and verify the final raw screenshot URL.
+- [x] Add registry JSON and run `generate.py --validate` plus `validate_links.py`.
+- [x] Submit a registry PR without claiming first-party or reviewed status.
 
 ## Draft registry metadata
 
-The candidate in [`../packaging/arqueon-dms-gaze-auth.json.example`](../packaging/arqueon-dms-gaze-auth.json.example) can be copied into the registry after the public repository and raw screenshot URL are reachable and identical to the final manifest.
+The metadata in [`../packaging/arqueon-dms-gaze-auth.json.example`](../packaging/arqueon-dms-gaze-auth.json.example) mirrors the entry submitted to the registry. The registry's own validation and preview jobs pass for the pull request.
