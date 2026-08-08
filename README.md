@@ -8,7 +8,7 @@ The plugin shows whether Gaze is installed, whether `gazed` is active, whether a
 
 ## Control Center surface
 
-![Gaze Authentication detail panel in DankMaterialShell](assets/screenshot.png)
+![Gaze Authentication detail panel in DankMaterialShell](https://raw.githubusercontent.com/arqueon/dms-gaze-auth/main/assets/screenshot.png)
 
 The `gazeAuth` plugin provides:
 
