@@ -1,0 +1,5 @@
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 22.04 LTS"
+VERSION_ID="22.04"
+VERSION_CODENAME=jammy

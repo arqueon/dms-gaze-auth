@@ -1,0 +1,7 @@
+#%PAM-1.0
+# Use only when the graphical Polkit agent must run face and password UI together.
+auth      sufficient pam_gaze_grosshack.so
+auth      include    system-auth
+account   include    system-auth
+password  include    system-auth
+session   include    system-auth

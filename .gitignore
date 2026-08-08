@@ -1,0 +1,14 @@
+# Local and sensitive material
+.env
+*.local
+*.log
+*.bak
+private/
+biometrics/
+templates/
+
+# Editors and build output
+.idea/
+.vscode/
+build/
+dist/

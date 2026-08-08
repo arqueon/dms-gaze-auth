@@ -1,0 +1,10 @@
+#%PAM-1.0
+# Standalone DMS Lock service: Gaze first, current DMS stack as fallback.
+# This works across distributions because DMS generates `dankshell` from the
+# host's own PAM policy (for example system-auth or common-auth).
+# Keep DMS fingerprint authentication in its separate PAM context.
+auth      sufficient pam_gaze.so
+auth      include    dankshell
+account   include    dankshell
+password  include    dankshell
+session   include    dankshell

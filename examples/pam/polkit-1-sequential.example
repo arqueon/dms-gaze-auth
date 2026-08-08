@@ -1,0 +1,7 @@
+#%PAM-1.0
+# Arch-style local Polkit override: face first, then the existing system stack.
+auth      sufficient pam_gaze.so
+auth      include    system-auth
+account   include    system-auth
+password  include    system-auth
+session   include    system-auth
