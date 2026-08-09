@@ -21,6 +21,10 @@ The `gazeAuth` plugin provides:
 
 It is intentionally a Control Center utility rather than a permanent bar indicator. Facial authentication normally needs attention only during setup or troubleshooting.
 
+## Getting started page
+
+Since v0.2.0 the plugin ships a settings page (Settings → Plugins → Gaze Authentication → gear) that walks new users through the four setup steps — install Gaze, enroll a face, connect the DMS lock, verify with the doctor — each with a copyable command and links to this repository and the official install guide. The page is informational only: the plugin never runs installers or edits PAM; every command is reviewed and run by the user in their own terminal. The Control Center tile also shows a contextual "next step" hint until the setup is complete.
+
 ## Install Gaze
 
 Review the detected plan first:

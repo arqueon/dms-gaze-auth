@@ -34,6 +34,21 @@ PluginComponent {
     property string doctorOutput: "Run the read-only doctor when you need the complete Gaze report."
     readonly property bool ready: status.installed === "1" && status.daemon_active === "1"
     readonly property int pamCount: Number(status.pam_lock || 0) + Number(status.pam_sudo || 0) + Number(status.pam_polkit || 0) + Number(status.pam_greetd || 0)
+    readonly property string nextStepHint: {
+        if (status.installed !== "1")
+            return "Next step: install Gaze. The plugin settings (Settings → Plugins → Gaze Authentication) walk you through it with copyable commands.";
+
+        if (status.daemon_active !== "1")
+            return "Next step: start the service — sudo systemctl enable --now gazed";
+
+        if (status.enrolled === "0")
+            return "Next step: enroll your face — run 'gaze add-face' in a terminal or use Manage faces.";
+
+        if (status.pam_lock !== "1" || status.dms_path_selected !== "1")
+            return "Next step: connect the DMS lock — see the guided checklist in the plugin settings.";
+
+        return "";
+    }
 
     function helperPath() {
         if (!pluginService || !pluginId)
@@ -395,8 +410,8 @@ PluginComponent {
 
                 StyledText {
                     width: parent.width
-                    text: "This plugin never edits PAM, enrolls faces, or stores biometric data. Installation and PAM changes remain explicit terminal operations with password fallback."
-                    color: Theme.surfaceVariantText
+                    text: root.nextStepHint !== "" ? root.nextStepHint : "This plugin never edits PAM, enrolls faces, or stores biometric data. Installation and PAM changes remain explicit terminal operations with password fallback."
+                    color: root.nextStepHint !== "" ? Theme.warning : Theme.surfaceVariantText
                     font.pixelSize: Theme.fontSizeSmall
                     wrapMode: Text.WordWrap
                 }

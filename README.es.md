@@ -14,6 +14,10 @@ Plugin de Control Center para consultar el estado de [Gaze](https://github.com/G
 - Abre `gaze-gui` para gestionar rostros.
 - No modifica PAM, no enrola rostros y no guarda información biométrica.
 
+## Página de primeros pasos
+
+Desde la v0.2.0 el plugin incluye una página de ajustes (Settings → Plugins → Gaze Authentication → engranaje) que guía a quien llega por primera vez por los cuatro pasos: instalar Gaze, enrolar un rostro, conectar el bloqueo de DMS y verificar con el doctor — cada uno con su comando copiable y enlaces al repositorio y a la guía oficial. La página es solo informativa: el plugin nunca ejecuta instaladores ni edita PAM; cada comando lo revisa y lo corre el usuario en su propia terminal. El panel del Control Center muestra además una pista de «siguiente paso» hasta completar la configuración.
+
 ## Instalación
 
 Primero revisa cualquier plan:
