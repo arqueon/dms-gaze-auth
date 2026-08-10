@@ -51,6 +51,19 @@ PluginSettings {
         "cmd": "gaze doctor",
         "warn": ""
     }]
+    readonly property var pamIntegrations: [{
+        "title": "sudo",
+        "desc": "Back up /etc/pam.d/sudo, then add pam_gaze.so before the existing authentication include. Keep fingerprint and password fallback; test a fresh transaction.",
+        "cmd": "sudo -k && sudo -v"
+    }, {
+        "title": "Polkit",
+        "desc": "On Arch-compatible systems, review and install a local polkit-1 PAM service with Gaze before system-auth. Restart Polkit and test a real graphical request.",
+        "cmd": "pkexec /usr/bin/true"
+    }, {
+        "title": "greetd / DMS Greeter",
+        "desc": "Add pam_gaze.so outside DMS's managed markers and before fallback auth. Validate the file before logging out; a real later login is the final UI test.",
+        "cmd": "dms auth validate --path /etc/pam.d/greetd --purpose password --json"
+    }]
 
     function copyCommand(cmd) {
         Quickshell.execDetached(["dms", "cl", "copy", cmd]);
@@ -198,6 +211,95 @@ PluginSettings {
 
         }
 
+    }
+
+    StyledText {
+        width: parent.width
+        text: "Optional PAM integrations"
+        font.pixelSize: Theme.fontSizeLarge
+        font.weight: Font.Bold
+        color: Theme.surfaceText
+        topPadding: Theme.spacingL
+    }
+
+    StyledText {
+        width: parent.width
+        text: "The plugin only detects these surfaces. Configure one at a time after direct Gaze authentication works. Back up the target PAM file, preserve password and fingerprint fallback, and read docs/PAM_INTEGRATIONS.md before editing anything. The commands below are tests, not installers."
+        color: Theme.surfaceVariantText
+        font.pixelSize: Theme.fontSizeSmall
+        wrapMode: Text.WordWrap
+    }
+
+    Repeater {
+        model: root.pamIntegrations
+
+        Rectangle {
+            required property var modelData
+
+            width: parent.width
+            implicitHeight: pamColumn.implicitHeight + Theme.spacingM * 2
+            radius: Theme.cornerRadius
+            color: Theme.surfaceContainerHigh
+
+            Column {
+                id: pamColumn
+
+                anchors.fill: parent
+                anchors.margins: Theme.spacingM
+                spacing: Theme.spacingS
+
+                StyledText {
+                    width: parent.width
+                    text: modelData.title
+                    color: Theme.surfaceText
+                    font.pixelSize: Theme.fontSizeMedium
+                    font.weight: Font.DemiBold
+                }
+
+                StyledText {
+                    width: parent.width
+                    text: modelData.desc
+                    color: Theme.surfaceVariantText
+                    font.pixelSize: Theme.fontSizeSmall
+                    wrapMode: Text.WordWrap
+                }
+
+                Rectangle {
+                    width: parent.width
+                    implicitHeight: pamCommandRow.implicitHeight + Theme.spacingS * 2
+                    radius: Theme.cornerRadiusSmall
+                    color: Theme.nestedSurface
+                    border.color: Theme.outlineMedium
+                    border.width: Theme.layerOutlineWidth
+
+                    RowLayout {
+                        id: pamCommandRow
+
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.leftMargin: Theme.spacingM
+                        anchors.rightMargin: Theme.spacingS
+                        spacing: Theme.spacingS
+
+                        StyledText {
+                            text: modelData.cmd
+                            color: Theme.surfaceText
+                            font.pixelSize: Theme.fontSizeSmall
+                            font.family: SettingsData.monoFontFamily
+                            wrapMode: Text.WrapAnywhere
+                            Layout.fillWidth: true
+                        }
+
+                        DankActionButton {
+                            iconName: "content_copy"
+                            tooltipText: "Copy test command"
+                            onClicked: root.copyCommand(modelData.cmd)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     RowLayout {

@@ -1,6 +1,7 @@
-# Dank Plugin Registry assessment
+# Dank Plugin Registry publication
 
 Assessment date: 2026-08-08
+Published: 2026-08-09
 
 ## Current answer
 
@@ -13,7 +14,7 @@ The repository now contains a real DMS plugin:
 - GPL-3.0-or-later licensing;
 - installation and validation documentation.
 
-The plugin is published and submitted in [AvengeMedia/dms-plugin-registry#733](https://github.com/AvengeMedia/dms-plugin-registry/pull/733). The registry schema, link, manifest-identity, and preview checks pass. Maintainer review and merge remain external steps.
+The plugin is available in the official Dank Plugin Registry. [AvengeMedia/dms-plugin-registry#733](https://github.com/AvengeMedia/dms-plugin-registry/pull/733) passed the registry schema, link, manifest-identity, and preview checks and was merged on 2026-08-09.
 
 ## Classification
 
@@ -44,7 +45,7 @@ The plugin is an on-demand status and action surface. It does not need a permane
 
 The QML component and status helper do not assume a package manager or PAM base stack. They remain useful whenever a compatible `gaze` command is installed. The bundled installer is stricter and only applies package changes on versions explicitly supported by Gaze upstream.
 
-## Remaining readiness gate
+## Publication checklist and follow-up evidence
 
 - [x] Choose a license and add a root license file.
 - [x] Implement `plugin.json` and the Control Center QML component.
@@ -58,8 +59,10 @@ The QML component and status helper do not assume a package manager or PAM base 
 - [x] Capture a representative screenshot on the default DMS theme.
 - [x] Publish the repository and verify the final raw screenshot URL.
 - [x] Add registry JSON and run `generate.py --validate` plus `validate_links.py`.
-- [x] Submit a registry PR without claiming first-party or reviewed status.
+- [x] Submit a registry PR without claiming first-party status.
+- [x] Pass registry validation and preview checks.
+- [x] Receive maintainer review and merge into the official registry.
 
-## Draft registry metadata
+## Registry metadata reference
 
-The metadata in [`../packaging/arqueon-dms-gaze-auth.json.example`](../packaging/arqueon-dms-gaze-auth.json.example) mirrors the entry submitted to the registry. The registry's own validation and preview jobs pass for the pull request.
+The metadata in [`../packaging/arqueon-dms-gaze-auth.json.example`](../packaging/arqueon-dms-gaze-auth.json.example) is a repository-side reference for the published entry. The registry remains the source of truth for its catalog metadata.
