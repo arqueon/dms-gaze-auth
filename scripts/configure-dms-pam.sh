@@ -3,7 +3,10 @@ set -Eeuo pipefail
 
 apply=0
 replace=0
-target="/etc/pam.d/dankshell-gaze"
+pam_dir="${GAZE_AUTH_PAM_DIR:-/etc/pam.d}"
+base_service="$pam_dir/dankshell"
+target="$pam_dir/dankshell-gaze"
+dms_bin="${GAZE_AUTH_DMS_BIN:-dms}"
 
 same_policy() {
     local left="$1"
@@ -19,8 +22,10 @@ usage() {
 Usage: scripts/configure-dms-pam.sh [--plan|--apply] [--replace]
 
 Installs the dedicated dankshell-gaze PAM service and selects it in DMS. The
-default is a dry plan. An existing different target is preserved unless both
---apply and --replace are given. This script never locks the session.
+default is a dry plan. If DMS has not created its base service yet, --plan
+explains the prerequisite and --apply runs the official `dms auth sync` first.
+An existing different target is preserved unless both --apply and --replace
+are given. This script never locks the session.
 EOF
 }
 
@@ -39,17 +44,33 @@ script_dir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
 source_file="$script_dir/../examples/pam/dankshell-gaze"
 
 [ -r "$source_file" ] || { printf 'Missing source: %s\n' "$source_file" >&2; exit 1; }
-[ -r /etc/pam.d/dankshell ] || {
-    printf '%s\n' 'DMS base service /etc/pam.d/dankshell is missing. Run DMS authentication sync first.' >&2
-    exit 1
-}
-
-if command -v dms >/dev/null 2>&1; then
-    dms auth validate --path "$source_file" --purpose password --json
-fi
 
 printf 'Source: %s\nTarget: %s\n' "$source_file" "$target"
-printf '%s\n' 'Fallback: the distro-specific DMS service /etc/pam.d/dankshell'
+printf 'Fallback: the distro-specific DMS service %s\n' "$base_service"
+
+if [ ! -r "$base_service" ]; then
+    command -v "$dms_bin" >/dev/null 2>&1 || {
+        printf '%s\n' 'The DMS CLI is required to create the missing base PAM service.' >&2
+        exit 1
+    }
+    if [ "$apply" -ne 1 ]; then
+        printf 'Prerequisite missing: %s\n' "$base_service"
+        printf '%s\n' 'On --apply, this script will run `dms auth sync` before installing the Gaze service.'
+        printf '%s\n' 'Plan only. Re-run with --apply when ready.'
+        exit 0
+    fi
+
+    printf 'DMS base service is missing; running `%s auth sync` first.\n' "$dms_bin"
+    "$dms_bin" auth sync
+    [ -r "$base_service" ] || {
+        printf 'DMS authentication sync completed but did not create %s. No Gaze PAM file was installed.\n' "$base_service" >&2
+        exit 1
+    }
+fi
+
+if command -v "$dms_bin" >/dev/null 2>&1; then
+    "$dms_bin" auth validate --path "$source_file" --purpose password --json
+fi
 
 if [ -e "$target" ] && ! same_policy "$source_file" "$target" && [ "$replace" -ne 1 ]; then
     printf '%s\n' 'A different target already exists. Review it, then use --replace explicitly.' >&2
@@ -73,10 +94,10 @@ fi
 
 sudo install -o root -g root -m 0644 "$source_file" "$target"
 
-if dms ipc call settings set lockPamPath "$target" \
-    && dms ipc call settings set lockPamInlineFprint false \
-    && dms ipc call settings set lockPamExternallyManaged false; then
-    printf '%s\n' 'DMS now selects /etc/pam.d/dankshell-gaze.'
+if "$dms_bin" ipc call settings set lockPamPath "$target" \
+    && "$dms_bin" ipc call settings set lockPamInlineFprint false \
+    && "$dms_bin" ipc call settings set lockPamExternallyManaged false; then
+    printf 'DMS now selects %s.\n' "$target"
 else
     printf '%s\n' 'PAM service installed, but the DMS setting could not be updated automatically.' >&2
     printf 'Set lockPamPath manually to %s before testing.\n' "$target" >&2

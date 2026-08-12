@@ -51,6 +51,10 @@ La integración opcional de DMS Lock se mantiene separada:
 ./scripts/configure-dms-pam.sh --apply
 ```
 
+Si DMS todavía no creó `/etc/pam.d/dankshell`, el plan informa el prerrequisito
+sin fallar. Al aplicar, el script ejecuta primero el comando oficial
+`dms auth sync` y sólo continúa cuando existe el servicio base.
+
 Solo debe aplicarse después de comprobar `gaze auth --verbose` y conservar contraseña o huella como respaldo.
 
 ## Integraciones opcionales con sudo, Polkit y greetd

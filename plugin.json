@@ -3,7 +3,7 @@
   "id": "gazeAuth",
   "name": "Gaze Authentication",
   "description": "Inspect Gaze face-authentication health and DMS lock integration without changing PAM or biometric data.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "GPL-3.0-or-later",
   "author": "arqueon",
   "repo": "https://github.com/arqueon/dms-gaze-auth",

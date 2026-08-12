@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+if [ "${1:-}" = '-v' ]; then
+    exit 0
+fi
+
+if [ "${1:-}" = 'install' ]; then
+    args=()
+    shift
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            -o|-g)
+                shift 2
+                ;;
+            *)
+                args+=("$1")
+                shift
+                ;;
+        esac
+    done
+    exec install "${args[@]}"
+fi
+
+exec "$@"

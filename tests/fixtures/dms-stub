@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+case "${1:-} ${2:-}" in
+    'auth sync')
+        : >"${GAZE_AUTH_PAM_DIR:?}/dankshell"
+        ;;
+    'auth validate')
+        printf '%s\n' '{"valid":true}'
+        ;;
+    'ipc call')
+        ;;
+    *)
+        printf 'Unexpected dms stub arguments: %s\n' "$*" >&2
+        exit 1
+        ;;
+esac

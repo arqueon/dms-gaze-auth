@@ -87,6 +87,10 @@ Do this only after `gaze auth --verbose` works and password/fingerprint fallback
 ./scripts/configure-dms-pam.sh --apply
 ```
 
+If DMS has not created `/etc/pam.d/dankshell` yet, the plan reports that
+prerequisite without failing. The apply step runs the official `dms auth sync`
+first and continues only after the base service exists.
+
 The dedicated `dankshell-gaze` service tries Gaze first and then includes DMS's own `dankshell` service. That makes the fallback distribution-aware: DMS retains the host's `system-auth`, `common-auth`, or equivalent policy.
 
 The routine never starts a lock test. Keep a root-capable terminal or TTY open before testing the real lock screen. Read [Security and rollback](docs/SECURITY.md) first.
