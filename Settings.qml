@@ -41,7 +41,7 @@ PluginSettings {
     }, {
         "num": "3",
         "title": "Connect the DMS lock screen",
-        "desc": "Installs the dedicated dankshell-gaze PAM service and selects it in DMS. Dry plan by default — re-run with --apply to commit. Coverage for sudo, polkit, and greetd is documented in the repository.",
+        "desc": "Installs the dedicated dankshell-gaze-grosshack PAM service and selects it in DMS. Face auth and the password field then run simultaneously: the right password wins during the scan, and a face match wins over a pending password. Dry plan by default — re-run with --apply to commit. Requires a Gaze build with the prompt-answering service gate. Coverage for sudo, polkit, and greetd is documented in the repository.",
         "cmd": "bash " + pluginRoot + "/scripts/configure-dms-pam.sh --plan",
         "warn": ""
     }, {

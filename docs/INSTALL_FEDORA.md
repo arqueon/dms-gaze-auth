@@ -36,7 +36,7 @@ After DMS has generated `/etc/pam.d/dankshell`, use the dedicated service:
 ./scripts/configure-dms-pam.sh --apply
 ```
 
-`dankshell-gaze` tries Gaze and then includes the DMS service, preserving the active Fedora policy. Keep a recovery TTY and verify password fallback before considering the integration complete.
+`dankshell-gaze-grosshack` tries Gaze and then includes the DMS service, preserving the active Fedora policy. Keep a recovery TTY and verify password fallback before considering the integration complete.
 
 ## Immutable systems
 

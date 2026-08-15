@@ -1,0 +1,15 @@
+#%PAM-1.0
+# Standalone DMS Lock service in simultaneous mode: face auth and the password
+# field race, and whichever succeeds first wins. The password field stays live
+# for the whole scan, so submitting the right password unlocks and drops the
+# face flow; a successful face match unlocks and discards the pending password.
+# This works across distributions because DMS generates `dankshell` from the
+# host's own PAM policy (for example system-auth or common-auth).
+# Keep DMS fingerprint authentication in its separate PAM context.
+# Requires Gaze with the prompt-answering service gate (gaze >= the version
+# that races for `dankshell-gaze-grosshack` without a controlling terminal).
+auth      sufficient pam_gaze_grosshack.so
+auth      include    dankshell
+account   include    dankshell
+password  include    dankshell
+session   include    dankshell

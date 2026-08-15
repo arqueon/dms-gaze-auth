@@ -62,12 +62,16 @@ status() {
     # latency without improving daemon health detection.
     printf 'enrolled=unknown\nface_summary=Run doctor to verify\n'
 
-    emit_bool pam_lock has_gaze_in "$pam_dir/dankshell-gaze"
+    emit_bool pam_lock has_gaze_in "$pam_dir/dankshell-gaze-grosshack"
+    if ! has_gaze_in "$pam_dir/dankshell-gaze-grosshack" && [ -r "$pam_dir/dankshell-gaze" ]; then
+        # Legacy sequential service from plugin versions before 0.4.0.
+        emit_bool pam_lock has_gaze_in "$pam_dir/dankshell-gaze"
+    fi
     emit_bool pam_sudo has_gaze_in "$pam_dir/sudo"
     emit_bool pam_polkit has_gaze_in "$pam_dir/polkit-1"
     emit_bool pam_greetd has_gaze_in "$pam_dir/greetd"
 
-    if [ -r "$settings_file" ] && grep -Eq '"lockPamPath"[[:space:]]*:[[:space:]]*"/etc/pam.d/dankshell-gaze"' "$settings_file"; then
+    if grep -Eq '"lockPamPath"[[:space:]]*:[[:space:]]*"/etc/pam.d/dankshell-gaze(-grosshack)?"' "$settings_file" 2>/dev/null; then
         printf 'dms_path_selected=1\n'
     else
         printf 'dms_path_selected=0\n'

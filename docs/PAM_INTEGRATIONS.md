@@ -5,9 +5,19 @@ status: it never edits PAM or runs the commands below. First make sure
 `gaze auth --verbose` succeeds, keep password authentication enabled, and keep
 a root-capable terminal or TTY available for recovery.
 
-Use the sequential `pam_gaze.so` module by default. It tries facial
-authentication first and then falls back to the existing stack. Do not replace
-the distribution's password, fingerprint, account, password, or session rules.
+Two Gaze modules are available:
+
+- `pam_gaze.so` — sequential: the face scan runs first, and the password
+  module only runs once the scan settles (match, fail, or timeout).
+- `pam_gaze_grosshack.so` — simultaneous: the face scan and the password
+  prompt race. Whichever succeeds first wins; a wrong password fails the
+  attempt even if the face would have matched later.
+
+The DMS lock screen uses `pam_gaze_grosshack.so` (via the
+`dankshell-gaze-grosshack` service installed by `configure-dms-pam.sh`), where
+DMS's own password field answers the prompt while the scan runs. For every
+other surface below, prefer `pam_gaze.so` unless the client keeps its password
+UI live during authentication and you want the race.
 
 ## Before each change
 
@@ -29,6 +39,15 @@ On Arch, CachyOS, and Manjaro, add this line before the existing
 
 ```text
 auth        sufficient    pam_gaze.so
+```
+
+For the simultaneous race (face scan and password prompt live at once — the
+terminal keeps accepting your password while the camera scans), use
+`pam_gaze_grosshack.so` instead; a terminal has a TTY, so the race runs on any
+Gaze build:
+
+```text
+auth        sufficient    pam_gaze_grosshack.so
 ```
 
 Keep existing fingerprint and password rules. Test a fresh PAM transaction:

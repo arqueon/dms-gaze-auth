@@ -42,15 +42,36 @@ The QML component never runs those privileged routines. This prevents a Control 
 
 ## DMS Lock
 
-The dedicated service has this sequence:
+The dedicated service (`examples/pam/dankshell-gaze-grosshack`) runs in
+simultaneous mode:
 
-1. `pam_gaze.so` is sufficient;
+1. `pam_gaze_grosshack.so` is sufficient and races the face scan against the
+   password conversation;
 2. DMS's existing `/etc/pam.d/dankshell` is included as fallback;
 3. account, password, and session policies are inherited from `dankshell`.
 
-This avoids embedding a Debian `common-auth` or Fedora/Arch `system-auth` assumption in the plugin. DMS remains responsible for deriving its base stack from the host.
+DMS submits the password only on an explicit Enter (`submitPassword`), never
+automatically, so the typed buffer stays intact while the scan runs; an empty
+Enter is a no-op, and Esc aborts the attempt without clearing the buffer. A
+successful face match unlocks and discards the pending password.
 
-DMS selects the custom service through `lockPamPath`. The standard lock flow still requires a user action to start PAM where the DMS UI does not provide a hands-free Gaze channel.
+This avoids embedding a Debian `common-auth` or Fedora/Arch `system-auth`
+assumption in the plugin. DMS remains responsible for deriving its base stack
+from the host. DMS selects the custom service through `lockPamPath`. Starting
+the attempt still requires a user action (Enter or the unlock button).
+
+The grosshack race needs a Gaze build with the prompt-answering service gate:
+`dankshell-gaze-grosshack` is allowlisted upstream so the race runs without a
+controlling terminal.
+
+## Auth-phase observer
+
+The daemon broadcasts a scrubbed `auth_phase` signal (phase, camera status
+codes, surface class — never face names or scores) to uid-checked registered
+observers. The `gaze-observe` helper binary (shipped with DMS) subscribes and
+prints `key=value` records; the shell's AuthHudPill and this plugin's Control
+Center tile consume them. Surfaces DMS already sees in-process (lock screen,
+polkit modal) render their own feedback and do not depend on the observer.
 
 ## DMS Greeter and greetd
 

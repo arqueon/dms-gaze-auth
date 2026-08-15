@@ -23,7 +23,7 @@ No biometric images, templates, usernames, hostnames, or local backup paths are 
 - A photograph matched the enrolled face sufficiently to reach the liveness stage but final authentication was denied after the liveness gate timed out.
 - `sudo`: face success confirmed; fallback to existing authentication confirmed when no face was detected.
 - Polkit: a real `pkexec` request invoked the Polkit PAM service and succeeded through Gaze.
-- DMS Lock: a real lock/unlock invoked `dankshell-gaze` with the ScreenLock surface and succeeded.
+- DMS Lock: a real lock/unlock invoked `dankshell-gaze-grosshack` with the ScreenLock surface and succeeded.
 - `greetd`: a PAM probe invoked the `greetd` service with the Login surface and succeeded without closing the active desktop session.
 - The Gaze daemon and `greetd` remained active after the tests.
 
@@ -34,7 +34,7 @@ No biometric images, templates, usernames, hostnames, or local backup paths are 
 - The rendered tile updated from `Checking…` to the installed/active state and reported all four detected PAM surfaces.
 - The read-only status helper completed in approximately 23 ms in the host session.
 - The final read-only `gaze doctor` run still returned 16 passed, 0 warnings, 0 errors and one enrolled profile.
-- `dms auth validate` accepted the bundled `dankshell-gaze` service with no warnings or missing modules.
+- `dms auth validate` accepted the bundled `dankshell-gaze-grosshack` service with no warnings or missing modules.
 - `qmllint`, `shellcheck`, the trailing-whitespace scan, and all nine repository tests passed.
 - Dry-run fixtures cover Ubuntu 24.04, Debian 13, Fedora 43, CachyOS, and refusal of unsupported Ubuntu/Fedora releases. No package operation was performed by these fixture tests.
 - The expanded detail surface rendered with the current DMS QML modules in an isolated Quickshell harness; the doctor action completed and reported one enrolled profile.

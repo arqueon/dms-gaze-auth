@@ -5,7 +5,7 @@ apply=0
 replace=0
 pam_dir="${GAZE_AUTH_PAM_DIR:-/etc/pam.d}"
 base_service="$pam_dir/dankshell"
-target="$pam_dir/dankshell-gaze"
+target="$pam_dir/dankshell-gaze-grosshack"
 dms_bin="${GAZE_AUTH_DMS_BIN:-dms}"
 
 same_policy() {
@@ -21,11 +21,12 @@ usage() {
     cat <<'EOF'
 Usage: scripts/configure-dms-pam.sh [--plan|--apply] [--replace]
 
-Installs the dedicated dankshell-gaze PAM service and selects it in DMS. The
-default is a dry plan. If DMS has not created its base service yet, --plan
-explains the prerequisite and --apply runs the official `dms auth sync` first.
-An existing different target is preserved unless both --apply and --replace
-are given. This script never locks the session.
+Installs the dedicated dankshell-gaze-grosshack PAM service (simultaneous
+face/password mode) and selects it in DMS. The default is a dry plan. If DMS
+has not created its base service yet, --plan explains the prerequisite and
+--apply runs the official `dms auth sync` first. An existing different target
+is preserved unless both --apply and --replace are given. This script never
+locks the session.
 EOF
 }
 
@@ -41,7 +42,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 script_dir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
-source_file="$script_dir/../examples/pam/dankshell-gaze"
+source_file="$script_dir/../examples/pam/dankshell-gaze-grosshack"
 
 [ -r "$source_file" ] || { printf 'Missing source: %s\n' "$source_file" >&2; exit 1; }
 
@@ -88,8 +89,8 @@ sudo -v
 if [ -e "$target" ] && ! same_policy "$source_file" "$target"; then
     backup_dir="/var/backups/dms-gaze-auth-$(date +%Y%m%d-%H%M%S)"
     sudo install -d -o root -g root -m 0700 "$backup_dir"
-    sudo cp -a -- "$target" "$backup_dir/dankshell-gaze.before"
-    printf 'Existing target backed up to %s\n' "$backup_dir/dankshell-gaze.before"
+    sudo cp -a -- "$target" "$backup_dir/dankshell-gaze-grosshack.before"
+    printf 'Existing target backed up to %s\n' "$backup_dir/dankshell-gaze-grosshack.before"
 fi
 
 sudo install -o root -g root -m 0644 "$source_file" "$target"

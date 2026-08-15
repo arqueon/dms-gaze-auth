@@ -29,7 +29,7 @@ The plugin is available in the official Dank Plugin Registry. [AvengeMedia/dms-p
 | Compositors | `any` |
 | Distribution metadata | `any` |
 | Runtime dependency | `gaze` |
-| Minimum DMS | `>=1.5.0` |
+| Minimum DMS | `>=1.6.0` |
 
 The manifest type is `widget` because DMS exposes Control Center plugins through `PluginComponent`. The visible **Control Center** filter comes from the `control-center` capability.
 

@@ -91,7 +91,17 @@ If DMS has not created `/etc/pam.d/dankshell` yet, the plan reports that
 prerequisite without failing. The apply step runs the official `dms auth sync`
 first and continues only after the base service exists.
 
-The dedicated `dankshell-gaze` service tries Gaze first and then includes DMS's own `dankshell` service. That makes the fallback distribution-aware: DMS retains the host's `system-auth`, `common-auth`, or equivalent policy.
+The dedicated `dankshell-gaze-grosshack` service runs Gaze and DMS's own
+`dankshell` service **simultaneously**: the face scan and the password field
+race, and whichever succeeds first wins. You can type your password while the
+camera is scanning; submitting the right password unlocks and drops the face
+flow, and a successful face match unlocks and discards the pending password.
+That makes the fallback distribution-aware: DMS retains the host's
+`system-auth`, `common-auth`, or equivalent policy.
+
+Requires a Gaze build with the prompt-answering service gate (the
+`dankshell-gaze-grosshack` allowlist) and DMS >= 1.6.0 for the simultaneous
+input handling and the auth-status HUD.
 
 The routine never starts a lock test. Keep a root-capable terminal or TTY open before testing the real lock screen. Read [Security and rollback](docs/SECURITY.md) first.
 

@@ -115,11 +115,25 @@ apply_output="$(
 )"
 assert_contains "$apply_output" 'DMS base service is missing; running'
 [ -r "$pam_test_dir/dankshell" ] || fail 'DMS base stub was not synced'
-installed_target="$pam_test_dir/dankshell-gaze"
+installed_target="$pam_test_dir/dankshell-gaze-grosshack"
 [ -r "$installed_target" ] || fail 'Gaze PAM target was not installed'
-cmp -s "$repo_root/examples/pam/dankshell-gaze" "$installed_target" || fail 'installed Gaze PAM policy differs'
+cmp -s "$repo_root/examples/pam/dankshell-gaze-grosshack" "$installed_target" || fail 'installed Gaze PAM policy differs'
 
-printf '%s\n' '[11/11] local links, optional shellcheck, and optional qmllint'
+printf '%s\n' '[11/12] simultaneous service is detected by the status probe'
+grosshack_pam_dir="$test_tmp/grosshack-pam"
+mkdir -p "$grosshack_pam_dir"
+cp "$repo_root/examples/pam/dankshell-gaze-grosshack" "$grosshack_pam_dir/dankshell-gaze-grosshack"
+grosshack_status="$(
+    PATH="$test_tmp/bin" \
+    GAZE_AUTH_PAM_DIR="$grosshack_pam_dir" \
+    GAZE_AUTH_DMS_SETTINGS="$test_tmp/grosshack-settings.json" \
+    GAZE_AUTH_OS_RELEASE="$fixtures/os-release-ubuntu" \
+        "$repo_root/scripts/gaze-status" status
+)"
+assert_contains "$grosshack_status" 'pam_lock=1'
+assert_contains "$grosshack_status" 'pam_sudo=0'
+
+printf '%s\n' '[12/12] local links, optional shellcheck, and optional qmllint'
 if command -v shellcheck >/dev/null 2>&1; then
     shellcheck -S warning "$repo_root"/scripts/* "$repo_root/tests/test.sh"
 fi

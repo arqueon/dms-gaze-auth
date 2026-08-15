@@ -48,4 +48,4 @@ Ubuntu 26.04 moved the PAM module search path to `/usr/lib/security`. Current Ga
 
 ## Recovery
 
-Keep a root-capable terminal or TTY open while testing. If the custom DMS service fails, restore DMS's `lockPamPath` to its previous value and remove or restore only `/etc/pam.d/dankshell-gaze`; do not edit `common-auth` as a recovery shortcut.
+Keep a root-capable terminal or TTY open while testing. If the custom DMS service fails, restore DMS's `lockPamPath` to its previous value and remove or restore only `/etc/pam.d/dankshell-gaze-grosshack`; do not edit `common-auth` as a recovery shortcut.

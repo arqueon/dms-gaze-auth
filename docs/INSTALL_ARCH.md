@@ -119,7 +119,7 @@ Do not restart or log out until a TTY/root recovery path is available. A PAM tes
 
 ```bash
 gaze doctor
-dms auth validate --path /etc/pam.d/dankshell-gaze --purpose password --json
+dms auth validate --path /etc/pam.d/dankshell-gaze-grosshack --purpose password --json
 dms auth validate --path /etc/pam.d/greetd --purpose password --json
 ```
 

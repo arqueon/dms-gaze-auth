@@ -33,6 +33,13 @@ PluginComponent {
     property bool doctorBusy: false
     property string doctorOutput: "Run the read-only doctor when you need the complete Gaze report."
     readonly property bool ready: status.installed === "1" && status.daemon_active === "1"
+    // Live auth-phase mirror from the Gaze observer channel (see the
+    // `gaze-observe` helper shipped with DMS). Only elevation surfaces are
+    // reported here; the lock screen and polkit modal render their own
+    // in-process feedback.
+    property string livePhase: ""
+    property string liveSurface: ""
+    readonly property bool liveAuthActive: livePhase !== "" && livePhase !== "idle" && liveSurface === "elevation"
     readonly property int pamCount: Number(status.pam_lock || 0) + Number(status.pam_sudo || 0) + Number(status.pam_polkit || 0) + Number(status.pam_greetd || 0)
     readonly property string nextStepHint: {
         if (status.installed !== "1")
@@ -147,6 +154,19 @@ PluginComponent {
         if (busy)
             return "Checking…";
 
+        if (root.liveAuthActive) {
+            switch (root.livePhase) {
+            case "matched":
+                return "Face matched · elevation";
+            case "not-recognized":
+                return "Face not recognized";
+            case "unavailable":
+                return "Face auth unavailable";
+            default:
+                return "Waiting for face";
+            }
+        }
+
         if (status.installed !== "1")
             return "Gaze not installed";
 
@@ -236,6 +256,76 @@ PluginComponent {
             id: doctorStderr
         }
 
+    }
+
+    // Live auth-phase observer. The helper exits non-zero when the daemon or
+    // its observer API is unavailable; the mirror then stays empty and the
+    // widget falls back to the static status rows.
+    Process {
+        id: observerProcess
+
+        command: ["gaze-observe"]
+        running: false
+        property string buffer: ""
+        property int consumed: 0
+
+        stdout: StdioCollector {
+            id: observerOutput
+
+            waitForEnd: false
+            onDataChanged: observerProcess.drain()
+        }
+
+        onRunningChanged: {
+            if (!observerProcess.running) {
+                root.livePhase = "";
+                root.liveSurface = "";
+                observerRetry.restart();
+            }
+        }
+
+        function drain(): void {
+            const text = observerOutput.text;
+            if (text.length > consumed) {
+                buffer += text.substring(consumed);
+                consumed = text.length;
+            }
+            let idx = -1;
+            while ((idx = buffer.indexOf("\n")) >= 0) {
+                const line = buffer.substring(0, idx);
+                buffer = buffer.substring(idx + 1);
+                applyObserverLine(line);
+            }
+        }
+
+        function applyObserverLine(line: string): void {
+            const values = {};
+            for (const field of String(line).trim().split(" ")) {
+                const eq = field.indexOf("=");
+                if (eq <= 0)
+                    continue;
+                values[field.substring(0, eq)] = field.substring(eq + 1);
+            }
+            if (values["phase"] !== undefined)
+                root.livePhase = values["phase"];
+            if (values["surface"] !== undefined)
+                root.liveSurface = values["surface"];
+        }
+    }
+
+    Timer {
+        id: observerRetry
+
+        interval: 10000
+        repeat: false
+        onTriggered: observerProcess.running = true
+    }
+
+    Timer {
+        interval: 100
+        running: true
+        repeat: false
+        onTriggered: observerProcess.running = true
     }
 
     ccDetailContent: Component {

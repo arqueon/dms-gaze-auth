@@ -9,7 +9,7 @@ Plugin de Control Center para consultar el estado de [Gaze](https://github.com/G
 ## Qué hace
 
 - Muestra paquete, daemon, enrolamiento y cobertura PAM.
-- Distingue si `dankshell-gaze` existe y si DMS lo tiene seleccionado.
+- Distingue si `dankshell-gaze-grosshack` existe y si DMS lo tiene seleccionado.
 - Ejecuta `gaze doctor` únicamente cuando se pulsa el botón.
 - Abre `gaze-gui` para gestionar rostros.
 - No modifica PAM, no enrola rostros y no guarda información biométrica.

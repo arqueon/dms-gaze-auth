@@ -70,7 +70,7 @@ The installer refuses to overwrite an existing non-matching plugin directory. Af
 
 The generated service includes `/etc/pam.d/dankshell` as its fallback instead of guessing the distribution's password stack. DMS already derives that service from the host policy, including `system-auth` or `common-auth` where appropriate.
 
-The routine refuses to overwrite a different existing `dankshell-gaze` file unless `--replace` is also supplied. Replacements are backed up under `/var/backups/dms-gaze-auth-YYYYMMDD-HHMMSS/`.
+The routine refuses to overwrite a different existing `dankshell-gaze-grosshack` file unless `--replace` is also supplied. Replacements are backed up under `/var/backups/dms-gaze-auth-YYYYMMDD-HHMMSS/`.
 
 ## Stage 4: real verification
 
