@@ -49,16 +49,17 @@ printf 'Source: %s\nTarget: %s\n' "$source_file" "$target"
 printf 'Fallback: the distro-specific DMS service %s\n' "$base_service"
 
 if [ ! -r "$base_service" ]; then
-    command -v "$dms_bin" >/dev/null 2>&1 || {
-        printf '%s\n' 'The DMS CLI is required to create the missing base PAM service.' >&2
-        exit 1
-    }
     if [ "$apply" -ne 1 ]; then
         printf 'Prerequisite missing: %s\n' "$base_service"
         printf '%s\n' 'On --apply, this script will run `dms auth sync` before installing the Gaze service.'
         printf '%s\n' 'Plan only. Re-run with --apply when ready.'
         exit 0
     fi
+
+    command -v "$dms_bin" >/dev/null 2>&1 || {
+        printf '%s\n' 'The DMS CLI is required to create the missing base PAM service.' >&2
+        exit 1
+    }
 
     printf 'DMS base service is missing; running `%s auth sync` first.\n' "$dms_bin"
     "$dms_bin" auth sync

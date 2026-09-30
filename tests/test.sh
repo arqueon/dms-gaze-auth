@@ -100,9 +100,14 @@ assert_contains "$missing_status" 'dms_path_selected=0'
 printf '%s\n' '[9/11] missing DMS PAM base is actionable'
 pam_test_dir="$test_tmp/configure-pam"
 mkdir -p "$pam_test_dir"
-plan_output="$(GAZE_AUTH_PAM_DIR="$pam_test_dir" "$repo_root/scripts/configure-dms-pam.sh" --plan)"
+plan_output="$(GAZE_AUTH_PAM_DIR="$pam_test_dir" GAZE_AUTH_DMS_BIN="$test_tmp/no-dms" "$repo_root/scripts/configure-dms-pam.sh" --plan)"
 assert_contains "$plan_output" "Prerequisite missing: $pam_test_dir/dankshell"
 assert_contains "$plan_output" 'On --apply, this script will run `dms auth sync`'
+if GAZE_AUTH_PAM_DIR="$pam_test_dir" GAZE_AUTH_DMS_BIN="$test_tmp/no-dms" \
+    "$repo_root/scripts/configure-dms-pam.sh" --apply >"$test_tmp/missing-dms.out" 2>&1; then
+    fail 'applying without DMS was accepted'
+fi
+assert_contains "$(cat "$test_tmp/missing-dms.out")" 'The DMS CLI is required'
 
 printf '%s\n' '[10/11] apply recovers a missing DMS PAM base through official sync'
 mkdir -p "$test_tmp/configure-bin"
