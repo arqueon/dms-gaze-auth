@@ -115,9 +115,9 @@ PluginSettings {
                     spacing: Theme.spacingS
 
                     Rectangle {
-                        width: 22
-                        height: 22
-                        radius: 11
+                        width: Theme.iconSize
+                        height: Theme.iconSize
+                        radius: height / 2
                         color: Theme.primary
 
                         StyledText {
