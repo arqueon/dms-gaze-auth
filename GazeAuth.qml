@@ -384,7 +384,7 @@ PluginComponent {
                     color: Theme.surfaceContainerHigh
                     visible: root.doctorOutput !== ""
 
-                    Flickable {
+                    DankFlickable {
                         id: doctorFlickable
 
                         anchors.fill: parent
