@@ -314,7 +314,7 @@ PluginComponent {
 
                             DankIcon {
                                 name: modelData.icon
-                                size: Theme.iconSizeSmall
+                                size: Theme.iconSizeSmall + Theme.spacingXS
                                 color: modelData.ok ? Theme.success : Theme.warning
                             }
 

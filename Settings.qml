@@ -117,7 +117,7 @@ PluginSettings {
                     Rectangle {
                         width: Theme.iconSize
                         height: Theme.iconSize
-                        radius: height / 2
+                        radius: Theme.cornerRadius
                         color: Theme.primary
 
                         StyledText {
@@ -151,7 +151,7 @@ PluginSettings {
                 Rectangle {
                     width: parent.width
                     implicitHeight: commandRow.implicitHeight + Theme.spacingS * 2
-                    radius: Theme.cornerRadiusSmall
+                    radius: Theme.cornerRadius / 2
                     color: Theme.nestedSurface
                     border.color: Theme.outlineMedium
                     border.width: Theme.layerOutlineWidth
@@ -267,7 +267,7 @@ PluginSettings {
                 Rectangle {
                     width: parent.width
                     implicitHeight: pamCommandRow.implicitHeight + Theme.spacingS * 2
-                    radius: Theme.cornerRadiusSmall
+                    radius: Theme.cornerRadius / 2
                     color: Theme.nestedSurface
                     border.color: Theme.outlineMedium
                     border.width: Theme.layerOutlineWidth
